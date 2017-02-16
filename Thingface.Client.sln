@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A07A5CA-8BBA-4796-A969-AC593B44CE0B}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Thingface.Client", "src\Thingface.Client\Thingface.Client.xproj", "{BBE9F37B-95CF-49A1-893C-445927CC056A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBE9F37B-95CF-49A1-893C-445927CC056A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBE9F37B-95CF-49A1-893C-445927CC056A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBE9F37B-95CF-49A1-893C-445927CC056A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBE9F37B-95CF-49A1-893C-445927CC056A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BBE9F37B-95CF-49A1-893C-445927CC056A} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
+	EndGlobalSection
+EndGlobal
