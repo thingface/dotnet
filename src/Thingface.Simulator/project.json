@@ -9,7 +9,7 @@
       "type": "platform",
       "version": "1.0.1"
     },
-    "Thingface.Client": "1.0.0-*"
+    "Thingface.Client": "0.0.1"
   },
 
   "frameworks": {

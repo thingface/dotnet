@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Thingface.Client
 {
-    public class MqttThingfaceClient : IThingfaceClient
+    public class ThingfaceClient : IThingfaceClient
     {
         private readonly string _deviceId;
         private readonly string _secretKey;
@@ -18,7 +18,7 @@ namespace Thingface.Client
         private readonly MqttClient _client;
         private Action<CommandContext> _commandHandler;
 
-        public MqttThingfaceClient(string deviceId, string secretKey, string host = "personal.thingface.io", int port = 8883)
+        public ThingfaceClient(string deviceId, string secretKey, string host = "personal.thingface.io", int port = 8883)
         {
             _deviceId = deviceId;
             _secretKey = secretKey;
@@ -47,7 +47,7 @@ namespace Thingface.Client
             _client.ConnectionClosed += _client_ConnectionClosed;
             _client.MqttMsgPublishReceived += _client_MqttMsgPublishReceived;
 
-            OnConnectionState(ConnectionState.Connected);
+            OnConnectionState(Thingface.Client.ConnectionState.Connected);
         }
 
         public Task DisconnectAsync()
@@ -71,7 +71,7 @@ namespace Thingface.Client
         public void SendSensorValue(string sensorId, double sensorValue)
         {
             var sensorValuePayload = new SensorValue(sensorValue);
-            var topic = "tf/d/" + _deviceId + "/" + sensorId;
+            var topic = "d/d/" + _deviceId + "/" + sensorId;
             var jsonString = JsonConvert.SerializeObject(sensorValuePayload);
             var message = Encoding.UTF8.GetBytes(jsonString);
             _client.Publish(topic, message, 0, false);
@@ -83,10 +83,10 @@ namespace Thingface.Client
             {
                 throw new Exception("Client is disconnected.");
             }
-            string topic = "tf/c/+/"+_deviceId;
+            string topic = "u/c/+/"+_deviceId;
             if (!string.IsNullOrWhiteSpace(sender))
             {
-                topic = "tf/c/"+sender+"/"+_deviceId;
+                topic = "u/c/"+sender+"/"+_deviceId;
             }
             _client.Subscribe(new [] {topic}, new byte[] {0});
             _commandHandler = commandHandler;
@@ -98,10 +98,10 @@ namespace Thingface.Client
             {
                 throw new Exception("Client is disconnected.");
             }
-            string topicFilter = "tf/c/+/"+_deviceId;
+            string topicFilter = "u/c/+/"+_deviceId;
             if (!string.IsNullOrWhiteSpace(sender))
             {
-                topicFilter = "tf/c/"+sender+"/"+_deviceId;
+                topicFilter = "u/c/"+sender+"/"+_deviceId;
             }
             _client.Unsubscribe(new [] {topicFilter});
             _commandHandler = null;
@@ -132,11 +132,11 @@ namespace Thingface.Client
 
         private void _client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
-            if (e.Topic.StartsWith("tf/c/"))
+            if (e.Topic.StartsWith("u/c/"))
             {
                 string payloadString = Encoding.UTF8.GetString(e.Message);
                 var command = JsonConvert.DeserializeObject<CommandPayload>(payloadString);
-                var regex = new Regex("tf/c/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)");
+                var regex = new Regex("u/c/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)");
                 var matches = regex.Match(e.Topic);
                 var commandSender = matches.Groups[1].Value;
                 if (_commandHandler!=null)
@@ -149,7 +149,7 @@ namespace Thingface.Client
 
         private void _client_ConnectionClosed(object sender, EventArgs eventArgs)
         {
-            OnConnectionState(ConnectionState.Disconnected);
+            OnConnectionState(Thingface.Client.ConnectionState.Disconnected);
         }
 
         #endregion

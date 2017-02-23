@@ -5,33 +5,30 @@ namespace Thingface.Simulator
 {
     public class Program
     {
-
-        private static void connectionChanged(object sender, ConnectionStateEventArgs eventArgs)
-        {
-            Console.WriteLine("Connection {0}", eventArgs.NewState);
+        private static void CommandHandler(CommandContext context){
+            if (context.CommandName == "say")
+            {
+                Console.WriteLine(context.CommandArgs[0]);
+            }
         }
 
-        private static void CommandReceived(object sender, CommandEventArgs eventArgs)
+        private static void ConnectionStateChanged(object sender, ConnectionStateEventArgs eventArgs)
         {
-            Console.WriteLine("event {0} sent command {1}", eventArgs.Sender, eventArgs.CommandName);
+            if (eventArgs.NewState == ConnectionState.Connected)
+            {
+                var thingface = (IThingfaceClient)sender;
+                thingface.OnCommand(CommandHandler);
+                thingface.SendSensorValue("temp", 12.3);
+            }
         }
 
         public static void Main(string[] args)
         {
-            var thingface = new MqttThingfaceClient("mydevice", "qEuzwhBLEPHEP25fts01wAnLHpe7GS", "dev-app.thingface.io");
-            thingface.ConnectionStateChanged += connectionChanged;
-            thingface.CommandReceived += CommandReceived;
+            var thingface = new ThingfaceClient("mydevice", "mydevicesecret", "my-app.thingface.io");
+            thingface.ConnectionStateChanged += ConnectionStateChanged;
             thingface.Connect();
 
-            thingface.OnCommand((cmd)=>{
-                Console.WriteLine("{0} sent command {1}", cmd.Sender, cmd.CommandName);
-            });
-            thingface.SendSensorValue("s1", 123);
-            Console.WriteLine("Simulator started.");
-
             Console.Read();
-
-            thingface.OffCommand();
 
             thingface.Disconnect();
         }
