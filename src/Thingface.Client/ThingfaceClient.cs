@@ -10,6 +10,8 @@ namespace Thingface.Client
 {
     public class ThingfaceClient : IThingfaceClient
     {
+        private const string CommandRegexString = "([ud]{1})/c/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)";
+
         private readonly string _deviceId;
         private readonly string _secretKey;
         private readonly string _host;
@@ -77,35 +79,37 @@ namespace Thingface.Client
             _client.Publish(topic, message, 0, false);
         }
 
-        public void OnCommand(Action<CommandContext> commandHandler = null, string sender = null)
+        public void OnCommand(Action<CommandContext> commandHandler = null, SenderType senderType = SenderType.All, string senderId = null)
         {
             if (!_client.IsConnected)
             {
                 throw new Exception("Client is disconnected.");
             }
-            string topic = "u/c/+/"+_deviceId;
-            if (!string.IsNullOrWhiteSpace(sender))
+            if (!string.IsNullOrWhiteSpace(senderId) && senderType==SenderType.All)
             {
-                topic = "u/c/"+sender+"/"+_deviceId;
+                throw new Exception("Sender type must be provided when sender ID is not null.");
             }
-            _client.Subscribe(new [] {topic}, new byte[] {0});
+
+            var topicFilter = BuildCommandTopicFilter(senderType, senderId);
+            _client.Subscribe(new[] {topicFilter}, new byte[] {0});
             _commandHandler = commandHandler;
         }
 
-        public void OffCommand(string sender = null)
+        public void OffCommand(SenderType senderType = SenderType.All, string senderId = null)
         {
             if (!_client.IsConnected)
             {
                 throw new Exception("Client is disconnected.");
             }
-            string topicFilter = "u/c/+/"+_deviceId;
-            if (!string.IsNullOrWhiteSpace(sender))
+            if (!string.IsNullOrWhiteSpace(senderId) && senderType == SenderType.All)
             {
-                topicFilter = "u/c/"+sender+"/"+_deviceId;
+                throw new Exception("Sender type must be provided when sender ID is not null.");
             }
-            _client.Unsubscribe(new [] {topicFilter});
+
+            var topicFilter = BuildCommandTopicFilter(senderType, senderId);
+            _client.Unsubscribe(new[] { topicFilter });
             _commandHandler = null;
-        }
+        }        
 
         public event EventHandler<ConnectionStateEventArgs> ConnectionStateChanged;
 
@@ -115,41 +119,65 @@ namespace Thingface.Client
 
         #region Private
 
-        private void OnConnectionState(ConnectionState state){
-            if (ConnectionStateChanged!=null)
+        private string BuildCommandTopicFilter(SenderType senderType, string senderId)
+        {
+            string senderTypeStr = "+";
+            switch (senderType)
             {
-                ConnectionStateChanged(this, new ConnectionStateEventArgs(state));
+                case SenderType.User:
+                    senderTypeStr = "u";
+                    break;
+                case SenderType.Device:
+                    senderTypeStr = "d";
+                    break;
             }
+            
+            if (!string.IsNullOrWhiteSpace(senderId))
+            {
+                return senderTypeStr + "/c/" + senderId + "/" + _deviceId;
+            }
+
+            return senderTypeStr + "/c/+/" + _deviceId;
         }
 
-        private void OnCommandReceived(string sender, string commandName, string[] commandArgs)
+        private SenderType ParseSenderType(string senderType)
         {
-            if (CommandReceived!=null)
+            if (senderType == "d")
             {
-                CommandReceived(this, new CommandEventArgs(sender, commandName, commandArgs));
+                return SenderType.Device;
             }
+            if (senderType == "u")
+            {
+                return SenderType.User;
+            }
+            throw new ArgumentOutOfRangeException(nameof(senderType));
+        }
+
+        private void OnConnectionState(ConnectionState state)
+        {
+            ConnectionStateChanged?.Invoke(this, new ConnectionStateEventArgs(state));
         }
 
         private void _client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
-            if (e.Topic.StartsWith("u/c/"))
+            var commandRegex = new Regex(CommandRegexString);
+            if (commandRegex.IsMatch(e.Topic))
             {
                 string payloadString = Encoding.UTF8.GetString(e.Message);
                 var command = JsonConvert.DeserializeObject<CommandPayload>(payloadString);
-                var regex = new Regex("u/c/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)");
-                var matches = regex.Match(e.Topic);
-                var commandSender = matches.Groups[1].Value;
-                if (_commandHandler!=null)
-                {
-                    _commandHandler(new CommandContext(commandSender, command.Name, command.Args));
-                }
-                OnCommandReceived(commandSender, command.Name, command.Args);
+                                
+                var matches = commandRegex.Match(e.Topic);
+                var senderType = ParseSenderType(matches.Groups[1].Value);
+                var senderId = matches.Groups[2].Value;
+
+                _commandHandler?.Invoke(new CommandContext(senderType, senderId, command.Name, command.Args));
+                CommandReceived?.Invoke(this, new CommandEventArgs(senderType, senderId, command.Name, command.Args));
             }
         }
 
         private void _client_ConnectionClosed(object sender, EventArgs eventArgs)
         {
-            OnConnectionState(Thingface.Client.ConnectionState.Disconnected);
+            OnConnectionState(ConnectionState.Disconnected);
         }
 
         #endregion

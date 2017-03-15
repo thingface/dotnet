@@ -4,14 +4,17 @@ namespace Thingface.Client
 {
     public class CommandEventArgs : EventArgs
     {
-        public CommandEventArgs(string sender, string commandName, string[] commandArgs)
+        public CommandEventArgs(SenderType senderType, string senderId, string commandName, string[] commandArgs)
         {
-            Sender = sender;
+            SenderId = senderId;
             CommandName = commandName;
             CommandArgs = commandArgs;
+            SenderType = senderType;
         }
 
-        public string Sender { get; }
+        public SenderType SenderType { get; }
+
+        public string SenderId { get; }
 
         public string CommandName { get; }
 

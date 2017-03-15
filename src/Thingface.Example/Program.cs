@@ -1,7 +1,7 @@
 ﻿using System;
 using Thingface.Client;
 
-namespace Thingface.Simulator
+namespace Thingface.Example
 {
     public class Program
     {
@@ -24,7 +24,7 @@ namespace Thingface.Simulator
 
         public static void Main(string[] args)
         {
-            var thingface = new ThingfaceClient("mydevice", "mydevicesecret", "my-app.thingface.io");
+            var thingface = new ThingfaceClient("mydevice", "secret-here", "my-app.thingface.io");
             thingface.ConnectionStateChanged += ConnectionStateChanged;
             thingface.Connect();
 

@@ -19,9 +19,9 @@ namespace Thingface.Client
 
         void SendSensorValue(string sensorId, double sensorValue);
 
-        void OnCommand(Action<CommandContext> commandHandler = null, string sender = null);
+        void OnCommand(Action<CommandContext> commandHandler = null, SenderType senderType = SenderType.All, string senderId = null);
 
-        void OffCommand(string sender = null);
+        void OffCommand(SenderType senderType = SenderType.All, string senderId = null);
 
         event EventHandler<ConnectionStateEventArgs> ConnectionStateChanged;
 

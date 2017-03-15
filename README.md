@@ -26,7 +26,7 @@ public class Program
         if (eventArgs.NewState == ConnectionState.Connected)
         {
             var thingface = (IThingfaceClient)sender;
-            thingface.OnCommand(CommandHandler);
+            thingface.OnCommand(CommandHandler); // subscribe to commands from all (users and devices)
             thingface.SendSensorValue("temp", 12.3);
         }
     }
@@ -66,14 +66,19 @@ returns *true* if this client is connected, otherwise it returns *false*. Use it
 ### event thingface.ConnectionStateChanged
 connection state event handling
 
-### thingface.OnCommand(Action<CommandContext> commandHandler = null, string sender = null);
+### event thingface.CommandReceived
+command received event handling
+
+### thingface.OnCommand(Action<CommandContext> commandHandler = null, SenderType senderType = SenderType.All, string senderId = null);
 subscribe for commands from sender
 - `commandHandler` (optional) - a function to handle commands
-- `sender` (optional) - sender id (username or device ID), if sender is not provided device will receive commands from every user or device
+- `senderType`(optional) - sender type User or Device
+- `senderId` (optional) - sender ID (username or device ID), if sender is not provided device will receive commands from every user or device
 
-### thingface.OffCommand(string sender = null);
+### thingface.OffCommand(SenderType senderType = SenderType.All, string senderId = null);
 unsubscribe for commands from sender
-- `sender` (optional) - sender id (username or device ID)
+- `senderType`(optional) - sender type User or Device
+- `senderId` (optional) - sender ID (username or device ID), if sender is not provided device will receive commands from every
 
 ### thingface.SendSensorValue(string sensorId, double sensorValue)
 send sensor value to thingface gateway
