@@ -20,13 +20,20 @@ namespace Thingface.Client
         private readonly MqttClient _client;
         private Action<CommandContext> _commandHandler;
 
-        public ThingfaceClient(string deviceId, string secretKey, string host = "personal.thingface.io", int port = 8883)
+        public ThingfaceClient(string deviceId, string secretKey, string host = "personal.thingface.io", int port = 8883, bool enableSsl = true)
         {
             _deviceId = deviceId;
             _secretKey = secretKey;
             _host = host;
             _port = port;
-            _client = new MqttClient(_host, _port, true, MqttSslProtocols.TLSv1_2, null, null);
+            if (enableSsl)
+            {
+                _client = new MqttClient(_host, _port, true, MqttSslProtocols.TLSv1_2, null, null);
+            }
+            else
+            {
+                _client = new MqttClient(_host, _port, false, MqttSslProtocols.None, null, null);
+            }
         }
 
         #region IThingfaceClient's members
@@ -109,7 +116,7 @@ namespace Thingface.Client
             var topicFilter = BuildCommandTopicFilter(senderType, senderId);
             _client.Unsubscribe(new[] { topicFilter });
             _commandHandler = null;
-        }        
+        }
 
         public event EventHandler<ConnectionStateEventArgs> ConnectionStateChanged;
 
@@ -131,7 +138,7 @@ namespace Thingface.Client
                     senderTypeStr = "d";
                     break;
             }
-            
+
             if (!string.IsNullOrWhiteSpace(senderId))
             {
                 return senderTypeStr + "/c/" + senderId + "/" + _deviceId;
@@ -165,7 +172,7 @@ namespace Thingface.Client
             {
                 string payloadString = Encoding.UTF8.GetString(e.Message);
                 var command = JsonConvert.DeserializeObject<CommandPayload>(payloadString);
-                                
+
                 var matches = commandRegex.Match(e.Topic);
                 var senderType = ParseSenderType(matches.Groups[1].Value);
                 var senderId = matches.Groups[2].Value;
