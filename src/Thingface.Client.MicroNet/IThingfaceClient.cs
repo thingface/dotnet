@@ -4,9 +4,9 @@ namespace Thingface.Client
 {
     public interface IThingfaceClient
     {
-        bool IsConnected { get; }
+        bool IsConnected { get; }    
 
-        void Connect();
+        void Connect();        
 
         void Disconnect();
 

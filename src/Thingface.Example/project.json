@@ -4,17 +4,28 @@
     "emitEntryPoint": true
   },
 
-  "dependencies": {
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.1"
-    },
-    "Thingface.Client": "0.0.1"
+  "dependencies": {},
+ 
+  "runtimes": {
+    "win10-x64":  {}
   },
 
   "frameworks": {
     "netcoreapp1.0": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        },
+        "System.Threading.Timer": "4.3.0",
+        "Thingface.Client": "0.0.1"
+      }
+    },
+    "net462": {
+      "dependencies": {
+        "Thingface.Client": "0.0.1"
+      }
     }
   }
 }

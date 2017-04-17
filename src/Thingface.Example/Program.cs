@@ -27,27 +27,29 @@ namespace Thingface.Example
         {
             if (eventArgs.NewState == ConnectionState.Connected)
             {
+                Console.WriteLine("client is connected");
                 var thingface = (IThingfaceClient)sender;
                 thingface.OnCommand(CommandHandler);
 
-                timer = new Timer(TimerCallback1, null, 3000, 5000);
+                timer = new Timer(TimerCallback1, null, 5000, 6000);
             }
             if(eventArgs.NewState == ConnectionState.Disconnected)
             {
                 timer.Dispose();
-                Console.WriteLine("Client is Disconnected");
+                Console.WriteLine("client is disconnected");
             }
         }
 
         public static void Main(string[] args)
         {
-            var thingface = new ThingfaceClient("mydevice", "secret-here", "my-app.thingface.io");
+            thingface = new ThingfaceClient("my-device-id", "my-device-secret-key");            
             thingface.ConnectionStateChanged += ConnectionStateChanged;
+            Console.WriteLine("client is connecting..");
             thingface.Connect();
 
             Console.Read();
 
-            thingface.Disconnect();
+            thingface.Disconnect();            
         }
     }
 }

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+#if NETSTANDARD1_5
 using M2Mqtt;
 using M2Mqtt.Messages;
-using Newtonsoft.Json;
+#else 
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
+#endif
 
 namespace Thingface.Client
 {
@@ -36,14 +40,9 @@ namespace Thingface.Client
             }
         }
 
-        #region IThingfaceClient's members
+#region IThingfaceClient's members
 
         public bool IsConnected => _client != null && _client.IsConnected;
-
-        public Task ConnectAsync()
-        {
-            return Task.Factory.StartNew(Connect);
-        }
 
         public void Connect()
         {
@@ -56,12 +55,7 @@ namespace Thingface.Client
             _client.ConnectionClosed += _client_ConnectionClosed;
             _client.MqttMsgPublishReceived += _client_MqttMsgPublishReceived;
 
-            OnConnectionState(Thingface.Client.ConnectionState.Connected);
-        }
-
-        public Task DisconnectAsync()
-        {
-            return Task.Factory.StartNew(Disconnect);
+            OnConnectionState(ConnectionState.Connected);
         }
 
         public void Disconnect()
@@ -72,14 +66,9 @@ namespace Thingface.Client
             }
         }
 
-        public Task SendSensorValueAsync(string sensorId, double sensorValue)
-        {
-            return Task.Factory.StartNew(() => SendSensorValue(sensorId, sensorValue));
-        }
-
         public void SendSensorValue(string sensorId, double sensorValue)
         {
-            var sensorValuePayload = new SensorValue(sensorValue);
+            var sensorValuePayload = new SensorValuePayload(sensorValue);
             var topic = "d/d/" + _deviceId + "/" + sensorId;
             var jsonString = JsonConvert.SerializeObject(sensorValuePayload);
             var message = Encoding.UTF8.GetBytes(jsonString);
@@ -122,9 +111,9 @@ namespace Thingface.Client
 
         public event EventHandler<CommandEventArgs> CommandReceived;
 
-        #endregion
+#endregion
 
-        #region Private
+#region Private
 
         private string BuildCommandTopicFilter(SenderType senderType, string senderId)
         {
@@ -187,6 +176,6 @@ namespace Thingface.Client
             OnConnectionState(ConnectionState.Disconnected);
         }
 
-        #endregion
+#endregion
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Thingface.Client
 {
-    public class SensorValue
+    public class SensorValuePayload
     {
-        public SensorValue(double value)
+        public SensorValuePayload(double value)
         {
             Value = value;
         }
 
-        public SensorValue()
+        public SensorValuePayload()
         {
         }
 

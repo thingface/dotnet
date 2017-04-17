@@ -1,8 +1,6 @@
-using System;
-
 namespace Thingface.Client
 {
-    public class ConnectionStateEventArgs : EventArgs
+    public class ConnectionStateEventArgs
     {
         public ConnectionStateEventArgs(ConnectionState state)
         {

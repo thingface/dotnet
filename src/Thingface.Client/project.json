@@ -1,15 +1,28 @@
-{
-  "version": "0.0.1",
-
-  "dependencies": {
-    "M2MqttDotnetCore": "1.0.0",
-    "NETStandard.Library": "1.6.1",
-    "Newtonsoft.Json": "9.0.1"
+﻿{
+  "version": "0.0.1",  
+  "authors": [ "Miroslav Bozik" ],
+  "description": "The thingface .NET Client is official client library for C#",
+  "packOptions": {    
+    "projectUrl": "https://thingface.io",
+    "licenseUrl": "https://thingface.io",
+    "owners": [ "Thingface" ],
+    "tags": [ "Thingface", "MQTT", "IoT", "monitoring", "control", "devices" ]
   },
-
+  "dependencies": {},
   "frameworks": {
+    "net462": {
+      "dependencies": {
+        "M2Mqtt": "4.3.0",
+        "Newtonsoft.Json": "10.0.2"
+      }
+    },
     "netstandard1.5": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "M2MqttDotnetCore": "1.0.0",
+        "NETStandard.Library": "1.6.1",
+        "Newtonsoft.Json": "10.0.2"
+      }
     }
   }
 }
