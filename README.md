@@ -1,5 +1,5 @@
-# The thingface client library for .NET Core
-simple client library as nuget package
+# The thingface client library for .NET
+simple client library as nuget package for .NET Core, .NET Framework 4.6.2 and Micro Framework
 
 ## Installation
 
