@@ -4,7 +4,7 @@ simple client library as nuget package for .NET Core, .NET Framework 4.6.2 and M
 ## Installation
 
 ```sh
-Install-Package ThingfaceClientNetCore
+Install-Package Thingface.Client
 ```
 
 ## Code Example

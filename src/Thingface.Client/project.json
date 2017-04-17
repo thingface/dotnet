@@ -1,10 +1,14 @@
 ﻿{
-  "version": "0.0.1",  
-  "authors": [ "Miroslav Bozik" ],
-  "description": "The thingface .NET Client is official client library for C#",
-  "packOptions": {    
+  "version": "0.0.1",
+  "authors": [ "Miroslav Božík" ],
+  "description": "The thingface .NET client library for connecting devices from .NET applications to thingface gateway",
+  "packOptions": {
     "projectUrl": "https://thingface.io",
     "licenseUrl": "https://thingface.io",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/thingface/thingface-net"
+    },
     "owners": [ "Thingface" ],
     "tags": [ "Thingface", "MQTT", "IoT", "monitoring", "control", "devices" ]
   },
