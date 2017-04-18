@@ -1,3 +1,4 @@
+#if !(NETMF44 || NETMF43)
 using Newtonsoft.Json;
 
 namespace Thingface.Client
@@ -11,3 +12,4 @@ namespace Thingface.Client
         public string[] Args { get; set; }
     }
 }
+#endif

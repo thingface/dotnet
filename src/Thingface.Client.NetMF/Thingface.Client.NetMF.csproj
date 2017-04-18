@@ -1,22 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <AssemblyName>Thingface.Client.MicroNet</AssemblyName>
+    <AssemblyName>Thingface.Client</AssemblyName>
     <OutputType>Library</OutputType>
-    <RootNamespace>Thingface.Client.MicroNet</RootNamespace>
+    <RootNamespace>Thingface.Client</RootNamespace>
     <ProjectTypeGuids>{b69e3092-b931-443c-abe7-7e7b65f2a37f};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EC9BF4E6-34E9-487D-8315-0E711093440A}</ProjectGuid>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.3</TargetFrameworkVersion>
     <NetMfTargetsBaseDir Condition="'$(NetMfTargetsBaseDir)'==''">$(MSBuildExtensionsPath32)\Microsoft\.NET Micro Framework\</NetMfTargetsBaseDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE,MF_FRAMEWORK_VERSION_V_</DefineConstants>
+    <DefineConstants>DEBUG;TRACE,NETMF43</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -24,21 +25,44 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE,NETMF43</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandContext.cs" />
-    <Compile Include="CommandEventArgs.cs" />
-    <Compile Include="ConnectionStateEventArgs.cs" />
-    <Compile Include="IThingfaceClient.cs" />
+    <Compile Include="..\Thingface.Client\CommandEventArgs.cs">
+      <Link>CommandEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Thingface.Client\ConnectionStateEventArgs.cs">
+      <Link>ConnectionStateEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Thingface.Client\IThingfaceClient.cs">
+      <Link>IThingfaceClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Thingface.Client\SenderType.cs">
+      <Link>SenderType.cs</Link>
+    </Compile>
+    <Compile Include="..\Thingface.Client\ThingfaceClient.cs">
+      <Link>ThingfaceClient.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SenderType.cs" />
-    <Compile Include="ThingfaceClient.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Json.NetMF, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Json.NetMF.1.3.0.0\lib\netmf43\Json.NetMF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="M2Mqtt.NetMf, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\M2Mqtt.4.3.0.0\lib\netmf43\M2Mqtt.NetMf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.SPOT.Native" />
+    <Reference Include="Microsoft.SPOT.TinyCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Text.RegularExpressions" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

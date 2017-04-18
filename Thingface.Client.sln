@@ -13,11 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Thingface.Example", "src\Thingface.Example\Thingface.Example.xproj", "{2B39236F-9872-494E-889E-B1E3C1FAE6B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thingface.Client.MicroNet", "src\Thingface.Client.MicroNet\Thingface.Client.MicroNet.csproj", "{EC9BF4E6-34E9-487D-8315-0E711093440A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thingface.Client.NetMF", "src\Thingface.Client.NetMF\Thingface.Client.NetMF.csproj", "{EC9BF4E6-34E9-487D-8315-0E711093440A}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Thingface.Client", "src\Thingface.Client\Thingface.Client.xproj", "{84053FB1-DFEA-429A-9B59-14FCFBB09ED5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{FBD32062-62AA-45BB-AFD5-5440D68D9DE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thingface.Example.Netduino", "src\Thingface.Example.Netduino\Thingface.Example.Netduino.csproj", "{EE14E3F8-8162-4B14-8DCA-908750180F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,12 @@ Global
 		{84053FB1-DFEA-429A-9B59-14FCFBB09ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84053FB1-DFEA-429A-9B59-14FCFBB09ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84053FB1-DFEA-429A-9B59-14FCFBB09ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE14E3F8-8162-4B14-8DCA-908750180F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE14E3F8-8162-4B14-8DCA-908750180F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE14E3F8-8162-4B14-8DCA-908750180F48}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{EE14E3F8-8162-4B14-8DCA-908750180F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE14E3F8-8162-4B14-8DCA-908750180F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE14E3F8-8162-4B14-8DCA-908750180F48}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +54,6 @@ Global
 		{EC9BF4E6-34E9-487D-8315-0E711093440A} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
 		{84053FB1-DFEA-429A-9B59-14FCFBB09ED5} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
 		{FBD32062-62AA-45BB-AFD5-5440D68D9DE3} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
+		{EE14E3F8-8162-4B14-8DCA-908750180F48} = {FBD32062-62AA-45BB-AFD5-5440D68D9DE3}
 	EndGlobalSection
 EndGlobal

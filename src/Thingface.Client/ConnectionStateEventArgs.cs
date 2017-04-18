@@ -1,4 +1,8 @@
+#if (NETMF44 || NETMF43)
+using Microsoft.SPOT;
+#else
 using System;
+#endif
 
 namespace Thingface.Client
 {
