@@ -9,11 +9,13 @@ namespace Thingface.Example
         static IThingfaceClient thingface = null;
 
         static Timer timer = null;
+        static Random random = new Random(123);
 
         private static void TimerCallback1(object state)
-        {
-            Console.WriteLine("send temp");
-            thingface.SendSensorValue("temp", 12.3);
+        {                        
+            var val = random.NextDouble()*10;
+            thingface.SendSensorValue("temp", val);
+            Console.WriteLine($"sent temp = {val}");
         }
 
         private static void CommandHandler(CommandContext context){
@@ -31,7 +33,7 @@ namespace Thingface.Example
                 var thingface = (IThingfaceClient)sender;
                 thingface.OnCommand(CommandHandler);
 
-                timer = new Timer(TimerCallback1, null, 5000, 6000);
+                timer = new Timer(TimerCallback1, null, 6000, 7000);
             }
             if(eventArgs.NewState == ConnectionState.Disconnected)
             {

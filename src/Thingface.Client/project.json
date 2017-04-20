@@ -1,5 +1,5 @@
 {
-  "version": "0.0.2",
+  "version": "0.0.3",
   "authors": [ "Miroslav Božík" ],
   "description": "The thingface .NET client library for connecting devices from .NET applications to thingface gateway",
   "packOptions": {
@@ -12,6 +12,10 @@
     "owners": [ "Thingface" ],
     "tags": [ "Thingface", "MQTT", "IoT", "monitoring", "control", "devices" ],
     "files": {
+      "excludeFiles": [
+        "bin/Release/netmf43/Thingface.Client.dll",
+        "bin/Release/netmf43/Thingface.Client.pdb"
+      ],      
       "mappings": {
         "lib/netmf43/be/Thingface.Client.dll": "../Thingface.Client.NetMF/bin/Release/be/Thingface.Client.dll",
         "lib/netmf43/be/Thingface.Client.pdb": "../Thingface.Client.NetMF/bin/Release/be/Thingface.Client.pdb",
@@ -20,7 +24,9 @@
         "lib/netmf43/le/Thingface.Client.dll": "../Thingface.Client.NetMF/bin/Release/le/Thingface.Client.dll",
         "lib/netmf43/le/Thingface.Client.pdb": "../Thingface.Client.NetMF/bin/Release/le/Thingface.Client.pdb",
         "lib/netmf43/le/Thingface.Client.pdbx": "../Thingface.Client.NetMF/bin/Release/le/Thingface.Client.pdbx",
-        "lib/netmf43/le/Thingface.Client.pe": "../Thingface.Client.NetMF/bin/Release/le/Thingface.Client.pe"
+        "lib/netmf43/le/Thingface.Client.pe": "../Thingface.Client.NetMF/bin/Release/le/Thingface.Client.pe",
+        //"lib/netmf43/Thingface.Client.dll": "../Thingface.Client.NetMF/bin/Release/Thingface.Client.dll",
+        //"lib/netmf43/Thingface.Client.pdb": "../Thingface.Client.NetMF/bin/Release/Thingface.Client.pdb"
       }
     }
   },

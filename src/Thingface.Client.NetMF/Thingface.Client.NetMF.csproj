@@ -45,6 +45,7 @@
     <Compile Include="..\Thingface.Client\ThingfaceClient.cs">
       <Link>ThingfaceClient.cs</Link>
     </Compile>
+    <Compile Include="DebuggerBrowsableState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
