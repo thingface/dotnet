@@ -19,12 +19,12 @@
           "version": "1.0.0"
         },
         "System.Threading.Timer": "4.3.0",
-        "Thingface.Client": "0.0.2"
+        "Thingface.Client": "0.0.4"
       }
     },
     "net462": {
       "dependencies": {
-        "Thingface.Client": "0.0.2"
+        "Thingface.Client": "0.0.4"
       }
     }
   }

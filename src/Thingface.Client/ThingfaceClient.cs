@@ -23,7 +23,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 namespace Thingface.Client
 {
     public class ThingfaceClient : IThingfaceClient
-    {       
+    {               
         private readonly string _deviceId;
         private readonly string _secretKey;
         private readonly string _host;
@@ -32,12 +32,42 @@ namespace Thingface.Client
         private MqttClient _client;
 
 #if !(NETMF44 || NETMF43)
-        private const string CommandRegexString = "([ud]{1})/c/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)";
+        private const string CommandRegexString = "([ud]{1})/([a-zA-Z0-9]+)/c/([a-zA-Z0-9]+)";
         private Action<CommandContext> _commandHandler;
 #endif
 
         public ThingfaceClient(string deviceId, string secretKey, string host = "personal.thingface.io", int port = 8883, bool enableSsl = true)
         {
+#if (NETMF44 || NETMF43)
+            if (StringExt.IsNullOrWhiteSpace(deviceId))
+#else
+            if (string.IsNullOrWhiteSpace(deviceId))
+#endif
+            {
+                throw new ArgumentNullException(nameof(deviceId));
+            }
+
+#if (NETMF44 || NETMF43)
+            if (StringExt.IsNullOrWhiteSpace(secretKey))
+#else
+            if (string.IsNullOrWhiteSpace(secretKey))
+#endif
+            {
+                throw new ArgumentNullException(nameof(secretKey));
+            }
+
+#if (NETMF44 || NETMF43)
+            if(StringExt.IsNullOrWhiteSpace(host))
+#else
+            if (string.IsNullOrWhiteSpace(host))
+#endif
+            {
+                throw new ArgumentNullException(nameof(host));
+            }
+            if (port <=0 || port > 65536)
+            {
+                throw new ArgumentOutOfRangeException(nameof(port));
+            }
             _deviceId = deviceId;
             _secretKey = secretKey;
             _host = host;
@@ -75,18 +105,43 @@ namespace Thingface.Client
                 _client.Disconnect();
             }
         }
-
-        public void SendSensorValue(string sensorId, double sensorValue)
+#if (NETMF43 || NETMF44)
+        public void SendTelemetry(string telemetryId, object telemetryValue)
+      
+#else
+        public void SendTelemetry<T>(string telemetryId, T telemetryValue)
+#endif
         {
-            var topic = "d/d/" + _deviceId + "/" + sensorId;
+#if (NETMF43 || NETMF44)
+            if (StringExt.IsNullOrWhiteSpace(telemetryId))            
+#else
+            if (string.IsNullOrWhiteSpace(telemetryId))
+#endif
+            {
+                throw new ArgumentNullException(nameof(telemetryId));
+            }
+
+            if (telemetryValue == null)
+            {
+                throw new ArgumentNullException(nameof(telemetryValue));
+            }
+
+            if (!(telemetryValue is double) &&
+                !(telemetryValue is int) &&
+                !(telemetryValue is long))
+            {
+                throw new ArgumentOutOfRangeException(nameof(telemetryValue));
+            }
+
+            var topic = "d/" + _deviceId + "/t/" + telemetryId;
 
 #if (NETMF44 || NETMF43)
             var jsonString = "{\"v\":";
-            jsonString += sensorValue;
+            jsonString += telemetryValue;
             jsonString += "}";
             var message = Encoding.UTF8.GetBytes(jsonString);
-#else        
-            var sensorValuePayload = new SensorValuePayload(sensorValue);            
+#else
+            var sensorValuePayload = new TelemetryPayload(telemetryValue);            
             var jsonString = JsonConvert.SerializeObject(sensorValuePayload);
             var message = Encoding.UTF8.GetBytes(jsonString);
 #endif
@@ -120,6 +175,10 @@ namespace Thingface.Client
             {
                 throw new Exception("Sender type must be provided when sender ID is not null.");
             }
+            if (!string.IsNullOrWhiteSpace(senderId) && senderId.Length > 25)
+            {
+                throw new ArgumentOutOfRangeException(nameof(senderId));
+            }
 
             var topicFilter = BuildCommandTopicFilter(senderType, senderId);
             _client.Subscribe(new[] {topicFilter}, new byte[] {0});
@@ -136,6 +195,15 @@ namespace Thingface.Client
             if ((senderId != null && senderId.Trim().Length > 0) && senderType == SenderType.All)
             {
                 throw new Exception("Sender type must be provided when sender ID is not null.");
+            }
+
+#if (NETMF43 || NETMF44)
+            if (!StringExt.IsNullOrWhiteSpace(senderId) && senderId.Length > 25)
+#else
+            if (!string.IsNullOrWhiteSpace(senderId) && senderId.Length > 25)
+#endif
+            {
+                throw new ArgumentOutOfRangeException(nameof(senderId));
             }
 
             var topicFilter = BuildCommandTopicFilter(senderType, senderId);
@@ -179,7 +247,7 @@ namespace Thingface.Client
             {
                 _client = new MqttClient(_host, _port, false, MqttSslProtocols.None, null, null);
             }
-#endif            
+#endif
         }
 
         private string BuildCommandTopicFilter(SenderType senderType, string senderId)
@@ -201,10 +269,10 @@ namespace Thingface.Client
             if (!string.IsNullOrWhiteSpace(senderId))
 #endif
             {
-                return senderTypeStr + "/c/" + senderId + "/" + _deviceId;
+                return senderTypeStr + "/" + senderId + "/c/" + _deviceId;
             }
 
-            return senderTypeStr + "/c/+/" + _deviceId;
+            return senderTypeStr + "/+/c/" + _deviceId;
         }
 
         private SenderType ParseSenderType(string senderType)
@@ -258,7 +326,7 @@ namespace Thingface.Client
             OnConnectionStateChanged(new ConnectionStateEventArgs(ConnectionState.Disconnected));
         }
 
-        #endregion
+#endregion
 
 #if (NETMF44 || NETMF43)
         protected virtual void OnConnectionStateChanged(EventArgs e)

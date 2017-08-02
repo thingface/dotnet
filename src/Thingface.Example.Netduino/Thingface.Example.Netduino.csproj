@@ -55,12 +55,14 @@
     <Reference Include="SecretLabs.NETMF.Hardware.Netduino" />
     <Reference Include="System" />
     <Reference Include="GoBus" />
-    <Reference Include="Thingface.Client, Version=0.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Thingface.Client.0.0.3\lib\netmf43\Thingface.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Thingface.Client.NetMF\Thingface.Client.NetMF.csproj">
+      <Project>{EC9BF4E6-34E9-487D-8315-0E711093440A}</Project>
+      <Name>Thingface.Client.NetMF</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -62,7 +62,8 @@ namespace Thingface.Example.Netduino
         private static void TimerCallback1(object state)
         {
             //_led.Write(true);
-            _thingface.SendSensorValue("temp", 33.3);
+            var val = 20.9;
+            _thingface.SendTelemetry("temp", val);
             //Thread.Sleep(200);
             //_led.Write(false);
         }

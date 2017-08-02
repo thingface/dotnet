@@ -14,7 +14,11 @@ namespace Thingface.Client
 
         void Disconnect();
 
-        void SendSensorValue(string sensorId, double sensorValue);
+#if (NETMF44 || NETMF43)        
+        void SendTelemetry(string telemetryId, object telemetryValue);
+#else
+        void SendTelemetry<T>(string telemetryId, T telemetryValue);
+#endif
 
 #if (NETMF44 || NETMF43 || MF_FRAMEWORK_VERSION_V4_3)
         void OnCommand(SenderType senderType = SenderType.All, string senderId = null);

@@ -42,6 +42,9 @@
     <Compile Include="..\Thingface.Client\SenderType.cs">
       <Link>SenderType.cs</Link>
     </Compile>
+    <Compile Include="..\Thingface.Client\StringExt.cs">
+      <Link>StringExt.cs</Link>
+    </Compile>
     <Compile Include="..\Thingface.Client\ThingfaceClient.cs">
       <Link>ThingfaceClient.cs</Link>
     </Compile>
