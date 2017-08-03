@@ -27,7 +27,7 @@ public class Program
         {
             var thingface = (IThingfaceClient)sender;
             thingface.OnCommand(CommandHandler); // subscribe to commands from all (users and devices)
-            thingface.SendTelemetry("temp", 12.3);
+            thingface.SendSensorValue("temp", 12.3);
         }
     }
 
@@ -80,11 +80,11 @@ unsubscribe for commands from sender
 - `senderType`(optional) - sender type User or Device
 - `senderId` (optional) - sender ID (username or device ID), if sender is not provided device will receive commands from every
 
-### thingface.SendTelemetry(string telemetryId, double telemetryValue)
-send telemetry value to thingface gateway
-- `telemetryId` - telemetry ID from the device
-- `telemetryValue` - current telemetry value
+### thingface.SendSensorValue(string sensorId, object sensorValue)
+send sensor value to thingface server
+- `sensorId` - sensor ID from the device
+- `sensorValue` - current sensor value
 
 ## More Information
 - [https://github.com/thingface](https://github.com/thingface)
-- [http://thingface.io](http://thingface.io/)
+- [https://thingface.io](https://thingface.io/)
