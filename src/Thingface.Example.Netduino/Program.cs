@@ -63,7 +63,7 @@ namespace Thingface.Example.Netduino
         {
             //_led.Write(true);
             var val = 20.9;
-            _thingface.SendTelemetry("temp", val);
+            _thingface.SendSensorValue("temp", val);
             //Thread.Sleep(200);
             //_led.Write(false);
         }

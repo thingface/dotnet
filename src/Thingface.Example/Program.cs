@@ -14,7 +14,7 @@ namespace Thingface.Example
         private static void TimerCallback1(object state)
         {                        
             var val = random.NextDouble()*10;
-            thingface.SendTelemetry("temp", val);
+            thingface.SendSensorValue("temp", val);
             Console.WriteLine($"sent temp = {val}");
         }
 

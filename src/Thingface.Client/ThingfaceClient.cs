@@ -106,42 +106,42 @@ namespace Thingface.Client
             }
         }
 #if (NETMF43 || NETMF44)
-        public void SendTelemetry(string telemetryId, object telemetryValue)
+        public void SendSensorValue(string sensorId, object sensorValue)
       
 #else
-        public void SendTelemetry<T>(string telemetryId, T telemetryValue)
+        public void SendSensorValue<T>(string sensorId, T sensorValue)
 #endif
         {
 #if (NETMF43 || NETMF44)
-            if (StringExt.IsNullOrWhiteSpace(telemetryId))            
+            if (StringExt.IsNullOrWhiteSpace(sensorId))            
 #else
-            if (string.IsNullOrWhiteSpace(telemetryId))
+            if (string.IsNullOrWhiteSpace(sensorId))
 #endif
             {
-                throw new ArgumentNullException(nameof(telemetryId));
+                throw new ArgumentNullException(nameof(sensorId));
             }
 
-            if (telemetryValue == null)
+            if (sensorValue == null)
             {
-                throw new ArgumentNullException(nameof(telemetryValue));
+                throw new ArgumentNullException(nameof(sensorValue));
             }
 
-            if (!(telemetryValue is double) &&
-                !(telemetryValue is int) &&
-                !(telemetryValue is long))
+            if (!(sensorValue is double) &&
+                !(sensorValue is int) &&
+                !(sensorValue is long))
             {
-                throw new ArgumentOutOfRangeException(nameof(telemetryValue));
+                throw new ArgumentOutOfRangeException(nameof(sensorValue));
             }
 
-            var topic = "d/" + _deviceId + "/t/" + telemetryId;
+            var topic = "d/" + _deviceId + "/s/" + sensorId;
 
 #if (NETMF44 || NETMF43)
             var jsonString = "{\"v\":";
-            jsonString += telemetryValue;
+            jsonString += sensorValue;
             jsonString += "}";
             var message = Encoding.UTF8.GetBytes(jsonString);
 #else
-            var sensorValuePayload = new TelemetryPayload(telemetryValue);            
+            var sensorValuePayload = new SensorPayload(sensorValue);            
             var jsonString = JsonConvert.SerializeObject(sensorValuePayload);
             var message = Encoding.UTF8.GetBytes(jsonString);
 #endif

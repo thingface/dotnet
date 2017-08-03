@@ -3,14 +3,14 @@ using Newtonsoft.Json;
 
 namespace Thingface.Client
 {
-    public class TelemetryPayload
+    public class SensorPayload
     {
-        public TelemetryPayload(object value)
+        public SensorPayload(object value)
         {
             Value = value;
         }
 
-        public TelemetryPayload()
+        public SensorPayload()
         {
         }
 
