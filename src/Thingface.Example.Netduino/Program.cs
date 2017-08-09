@@ -10,20 +10,21 @@ namespace Thingface.Example.Netduino
     {
         private static IThingfaceClient _thingface;
         private static Timer _timer;
-        private static readonly OutputPort _led = new OutputPort(Pins.ONBOARD_LED, false);
+        private static readonly OutputPort _led = new OutputPort(Pins.ONBOARD_LED, false);        
 
         public static void Main()
         {
             // Enabled DHCP
-            Microsoft.SPOT.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()[0].EnableDhcp();
+            //Microsoft.SPOT.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()[0].EnableDhcp();
 
             // Thingface Client initialization
-            _thingface = new ThingfaceClient("my-device-id", "device-secret-key");
+            //_thingface = new ThingfaceClient("my-device-id", "device-secret-key");
+            _thingface = new ThingfaceClient("d71b43f9bce747cf", "799mqfgV156ZscgZg3QVE1fYOTjwPN", "dev-app.thingface.io", 1883, false);
             _thingface.ConnectionStateChanged += ConnectionStateChanged;
             _thingface.CommandReceived += _thingface_CommandReceived;
-            Debug.Print("client is connecting..");
+            Debug.Print("device is connecting..");
             _thingface.Connect();
-            Debug.Print("client is connected");
+            Debug.Print("device is connected");
 
             Thread.Sleep(Timeout.Infinite);
         }
@@ -38,10 +39,12 @@ namespace Thingface.Example.Netduino
             if (commandEvent.CommandName == "on")
             {
                 _led.Write(true);
+                Debug.Print("LED ON");
             }
             if (commandEvent.CommandName == "off")
             {
                 _led.Write(false);
+                Debug.Print("LED OFF");
             }
         }
 
@@ -60,12 +63,9 @@ namespace Thingface.Example.Netduino
         }
 
         private static void TimerCallback1(object state)
-        {
-            //_led.Write(true);
-            var val = 20.9;
+        {            
+            var val = 12.3;
             _thingface.SendSensorValue("temp", val);
-            //Thread.Sleep(200);
-            //_led.Write(false);
         }
     }
 }

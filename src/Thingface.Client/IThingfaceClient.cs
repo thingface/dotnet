@@ -27,6 +27,11 @@ namespace Thingface.Client
         void Disconnect();
 
 #if (NETMF44 || NETMF43)        
+        /// <summary>
+        /// Send sensor value to thingface server
+        /// </summary>
+        /// <param name="sensorId"></param>
+        /// <param name="sensorValue"></param>
         void SendSensorValue(string sensorId, object sensorValue);
 #else
         /// <summary>

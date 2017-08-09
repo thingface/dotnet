@@ -30,27 +30,26 @@ namespace Thingface.Example
         {
             if (eventArgs.NewState == ConnectionState.Connected)
             {
-                Console.WriteLine("client is connected");
+                Console.WriteLine("device is connected");
                 var thingface = (IThingfaceClient)sender;
                 //thingface.OnCommand(CommandHandler, SenderType.User, "mirrobozik");
                 //thingface.OnCommand(CommandHandler, SenderType.User);
                 thingface.OnCommand(CommandHandler);
 
-                //timer = new Timer(TimerCallback1, null, 6000, 7000);
+                timer = new Timer(TimerCallback1, null, 6000, 7000);
             }
             if(eventArgs.NewState == ConnectionState.Disconnected)
             {
-                //timer.Dispose();
-                Console.WriteLine("client is disconnected");
+                timer.Dispose();
+                Console.WriteLine("device is disconnected");
             }
         }
 
         public static void Main(string[] args)
         {
             //thingface = new ThingfaceClient("my-device-id", "my-device-secret-key");
-            thingface = new ThingfaceClient("d71b43f9bce747cf", "799mqfgV156ZscgZg3QVE1fYOTjwPN", "dev-app.thingface.io");
             thingface.ConnectionStateChanged += ConnectionStateChanged;
-            Console.WriteLine("client is connecting..");
+            Console.WriteLine("device is connecting..");
             thingface.Connect();
 
             Console.Read();
