@@ -33,7 +33,7 @@ public class Program
 
     public static void Main(string[] args)
     {
-        var thingface = new ThingfaceClient("mydevice", "mydevicesecret");
+        var thingface = new ThingfaceClient("mydeviceid", "mydevicesecretkey");
         thingface.ConnectionStateChanged += ConnectionStateChanged;
         thingface.Connect();
 
@@ -52,9 +52,9 @@ API is very simple. Have a look to api reference.
 thingface client constructor
 - `deviceId` - device ID
 - `deviceSecretKey` - secret key for that device
-- `host` - device gateway hostname (default **personal.thingface.io**)
-- `port` - device gateway port (default **8883**)
-- `enableSsl` - secure connection enabled (default **true**)
+- `host` (optional) - device gateway hostname (default **personal.thingface.io**)
+- `port` (optional) - device gateway port (default **8883** for SSL connection, **1883** for no SSL connection)
+- `enableSsl` (optional) - enable SSL connection (default **true**)
 
 ### thingface.Connect()
 connect to the thingface device gateway specified by the given host name with current device ID and device secret key.
