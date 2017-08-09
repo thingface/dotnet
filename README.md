@@ -1,5 +1,5 @@
 # The thingface client library for .NET
-simple client library as nuget package for .NET Core, .NET Framework 4.6.2 and Micro Framework
+simple client library as nuget package for .NET Core, .NET Framework 4.6.2 and Micro Framework 4.3
 
 ## Installation
 
@@ -33,7 +33,7 @@ public class Program
 
     public static void Main(string[] args)
     {
-        var thingface = new ThingfaceClient("mydevice", "mydevicesecret", "my-app.thingface.io");
+        var thingface = new ThingfaceClient("mydevice", "mydevicesecret");
         thingface.ConnectionStateChanged += ConnectionStateChanged;
         thingface.Connect();
 
@@ -48,11 +48,13 @@ public class Program
 ## API Reference
 API is very simple. Have a look to api reference.
 
-### new ThingfaceClient(string deviceId, string deviceSecretKey, string host)
+### new ThingfaceClient(string deviceId, string deviceSecretKey, string host = "personal.thingface.io", int port = 8883, bool enableSsl = true)
 thingface client constructor
 - `deviceId` - device ID
 - `deviceSecretKey` - secret key for that device
-- `host` - device gateway hostname
+- `host` - device gateway hostname (default **personal.thingface.io**)
+- `port` - device gateway port (default **8883**)
+- `enableSsl` - secure connection enabled (default **true**)
 
 ### thingface.Connect()
 connect to the thingface device gateway specified by the given host name with current device ID and device secret key.
@@ -78,10 +80,10 @@ subscribe for commands from sender
 ### thingface.OffCommand(SenderType senderType = SenderType.All, string senderId = null);
 unsubscribe for commands from sender
 - `senderType`(optional) - sender type User or Device
-- `senderId` (optional) - sender ID (username or device ID), if sender is not provided device will receive commands from every
+- `senderId` (optional) - sender ID (username or device ID), if sender is not provided device will receive commands from every user or device
 
 ### thingface.SendSensorValue(string sensorId, object sensorValue)
-send sensor value to thingface server
+Send sensor value to thingface server. The value can be only `double` or `long` type.
 - `sensorId` - sensor ID from the device
 - `sensorValue` - current sensor value
 
