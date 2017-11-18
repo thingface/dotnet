@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Thingface.Client</id>
+    <version>0.0.5</version>
+    <authors>Miroslav Božík</authors>    
+    <licenseUrl>https://github.com/thingface/dotnet/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/thingface/dotnet</projectUrl>    
+    <description>Thingface client library for .NET Core, .NET Framework and .NET MicroFramework devices</description>    
+    <copyright>Copyright 2017</copyright>
+    <tags>Thingface MQTT IoT monitoring control devices</tags>
+    <dependencies>      
+      <group targetFramework="netmf44">
+        <dependency id="Json.NetMF" version="1.3.0.0" />
+        <dependency id="M2Mqtt" version="4.3.0.0" />
+      </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="M2MqttClientDotnetCore" version="1.0.1" />
+        <dependency id="Newtonsoft.Json" version="10.0.3" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- netmf43 -->
+    <file src="src\Thingface.Client.NetMF\bin\Release\le\Thingface.Client.p*" target="lib\netmf43\le" />
+    <file src="src\Thingface.Client.NetMF\bin\Release\be\Thingface.Client.p*" target="lib\netmf43\be" />
+    <file src="src\Thingface.Client.NetMF\bin\Release\Thingface.Client.*" target="lib\netmf43" />
+
+    <!-- netstandard -->    
+    <file src="src\Thingface.Client\bin\Release\netstandard2.0\Thingface.Client.dll" target="lib\netstandard2.0" />
+  </files>
+</package>

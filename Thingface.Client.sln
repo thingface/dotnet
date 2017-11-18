@@ -1,23 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A07A5CA-8BBA-4796-A969-AC593B44CE0B}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Thingface.Example", "src\Thingface.Example\Thingface.Example.xproj", "{2B39236F-9872-494E-889E-B1E3C1FAE6B4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{FBD32062-62AA-45BB-AFD5-5440D68D9DE3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thingface.Example", "src\Thingface.Example\Thingface.Example.csproj", "{2B39236F-9872-494E-889E-B1E3C1FAE6B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thingface.Client.NetMF", "src\Thingface.Client.NetMF\Thingface.Client.NetMF.csproj", "{EC9BF4E6-34E9-487D-8315-0E711093440A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Thingface.Client", "src\Thingface.Client\Thingface.Client.xproj", "{84053FB1-DFEA-429A-9B59-14FCFBB09ED5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{FBD32062-62AA-45BB-AFD5-5440D68D9DE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Thingface.Client", "src\Thingface.Client\Thingface.Client.csproj", "{84053FB1-DFEA-429A-9B59-14FCFBB09ED5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thingface.Example.Netduino", "src\Thingface.Example.Netduino\Thingface.Example.Netduino.csproj", "{EE14E3F8-8162-4B14-8DCA-908750180F48}"
 EndProject
@@ -50,10 +49,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{FBD32062-62AA-45BB-AFD5-5440D68D9DE3} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
 		{2B39236F-9872-494E-889E-B1E3C1FAE6B4} = {FBD32062-62AA-45BB-AFD5-5440D68D9DE3}
 		{EC9BF4E6-34E9-487D-8315-0E711093440A} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
 		{84053FB1-DFEA-429A-9B59-14FCFBB09ED5} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
-		{FBD32062-62AA-45BB-AFD5-5440D68D9DE3} = {7DBD672D-E4ED-4832-A85F-7BE1FA50BA8E}
 		{EE14E3F8-8162-4B14-8DCA-908750180F48} = {FBD32062-62AA-45BB-AFD5-5440D68D9DE3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F00A983-2FFA-4356-912C-162853DA36A5}
 	EndGlobalSection
 EndGlobal

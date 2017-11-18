@@ -46,8 +46,8 @@ namespace Thingface.Example
         }
 
         public static void Main(string[] args)
-        {
-            //thingface = new ThingfaceClient("my-device-id", "my-device-secret-key");
+        {            
+            thingface = new ThingfaceClient("mydeviceid", "my-device-secret-key");
             thingface.ConnectionStateChanged += ConnectionStateChanged;
             Console.WriteLine("device is connecting..");
             thingface.Connect();

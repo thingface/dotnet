@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 #endif
 
-#if NETSTANDARD1_5
+#if NETSTANDARD2_0
 using M2Mqtt;
 using M2Mqtt.Messages;
 #else
@@ -86,15 +86,14 @@ namespace Thingface.Client
 
         public void Connect()
         {
+            _client.ConnectionClosed += _client_ConnectionClosed;
+            _client.MqttMsgPublishReceived += _client_MqttMsgPublishReceived;
+
             var response = _client.Connect(_deviceId, _deviceId, _secretKey, true, 60);
             if (response > 0)
             {
                 throw new Exception("Cannot connect to thingface gateway");
-            }
-
-            _client.ConnectionClosed += _client_ConnectionClosed;
-            _client.MqttMsgPublishReceived += _client_MqttMsgPublishReceived;
-
+            }            
             OnConnectionStateChanged(new ConnectionStateEventArgs(ConnectionState.Connected));
         }
 
@@ -237,6 +236,7 @@ namespace Thingface.Client
             else
             {
                 _client = new MqttClient(_host, _port, false, null, null, MqttSslProtocols.None);
+                _client.ProtocolVersion = MqttProtocolVersion.Version_3_1_1;                
             }
 #else
             if (_enableSsl)
@@ -246,6 +246,7 @@ namespace Thingface.Client
             else
             {
                 _client = new MqttClient(_host, _port, false, MqttSslProtocols.None, null, null);
+                _client.ProtocolVersion = MqttProtocolVersion.Version_3_1_1;
             }
 #endif
         }

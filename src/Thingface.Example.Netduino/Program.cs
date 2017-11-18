@@ -18,8 +18,7 @@ namespace Thingface.Example.Netduino
             //Microsoft.SPOT.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()[0].EnableDhcp();
 
             // Thingface Client initialization
-            //_thingface = new ThingfaceClient("my-device-id", "device-secret-key");
-            _thingface = new ThingfaceClient("d71b43f9bce747cf", "799mqfgV156ZscgZg3QVE1fYOTjwPN", "dev-app.thingface.io", 1883, false);
+            _thingface = new ThingfaceClient("my-device-id", "device-secret-key");            
             _thingface.ConnectionStateChanged += ConnectionStateChanged;
             _thingface.CommandReceived += _thingface_CommandReceived;
             Debug.Print("device is connecting..");
