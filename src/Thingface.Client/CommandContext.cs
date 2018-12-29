@@ -2,15 +2,12 @@
 {
     public class CommandContext
     {
-        public CommandContext(SenderType senderType, string senderId, string commandName, string[] commandArgs)
+        public CommandContext(string senderId, string commandName, string[] commandArgs)
         {
             SenderId = senderId;
             CommandName = commandName;
-            CommandArgs = commandArgs;
-            SenderType = senderType;
-        }
-
-        public SenderType SenderType { get; }
+            CommandArgs = commandArgs;            
+        }        
 
         public string SenderId { get; }
 

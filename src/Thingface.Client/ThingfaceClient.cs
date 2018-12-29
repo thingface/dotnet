@@ -33,7 +33,7 @@ namespace Thingface.Client
 
 #if !(NETMF44 || NETMF43)
         private const string CommandRegexString = "([ud]{1})/([a-zA-Z0-9]+)/c/([a-zA-Z0-9]+)";
-        private Action<CommandContext> _commandHandler;
+        private Func<CommandContext, int> _commandHandler;
 #endif
 
         public ThingfaceClient(string deviceId, string secretKey, string host = "personal.thingface.io", int port = 8883, bool enableSsl = true)
@@ -132,7 +132,7 @@ namespace Thingface.Client
                 throw new ArgumentOutOfRangeException(nameof(sensorValue));
             }
 
-            var topic = "d/" + _deviceId + "/s/" + sensorId;
+            var topic = "sensor_data/" + _deviceId + "/" + sensorId;
 
 #if (NETMF44 || NETMF43)
             var jsonString = "{\"v\":";
@@ -149,52 +149,40 @@ namespace Thingface.Client
         }
 
 #if (NETMF44 || NETMF43)
-        public void OnCommand(SenderType senderType = SenderType.All, string senderId = null)
+        public void OnCommand(string senderId = null)
         {
             if (!_client.IsConnected)
             {
                 throw new Exception("Client is disconnected.");
-            }
-            if (senderId != null && senderType == SenderType.All)
-            {
-                throw new Exception("Sender type must be provided when sender ID is not null.");
-            }
+            }            
 
-            var topicFilter = BuildCommandTopicFilter(senderType, senderId);
+            var topicFilter = BuildCommandTopicFilter(senderId);
             _client.Subscribe(new[] { topicFilter }, new byte[] { 0 });
         }
 #else
-        public void OnCommand(Action<CommandContext> commandHandler = null, SenderType senderType = SenderType.All, string senderId = null)
+        public void OnCommand(Func<CommandContext, int> commandHandler = null, string senderId = null)
         {
             if (!_client.IsConnected)
             {
                 throw new Exception("Client is disconnected.");
-            }
-            if (!string.IsNullOrWhiteSpace(senderId) && senderType==SenderType.All)
-            {
-                throw new Exception("Sender type must be provided when sender ID is not null.");
-            }
+            }            
             if (!string.IsNullOrWhiteSpace(senderId) && senderId.Length > 25)
             {
                 throw new ArgumentOutOfRangeException(nameof(senderId));
             }
 
-            var topicFilter = BuildCommandTopicFilter(senderType, senderId);
+            var topicFilter = BuildCommandTopicFilter(senderId);
             _client.Subscribe(new[] {topicFilter}, new byte[] {0});
             _commandHandler = commandHandler;
         }
 #endif
 
-        public void OffCommand(SenderType senderType = SenderType.All, string senderId = null)
+        public void OffCommand(string senderId = null)
         {
             if (!_client.IsConnected)
             {
                 throw new Exception("Client is disconnected.");
-            }
-            if ((senderId != null && senderId.Trim().Length > 0) && senderType == SenderType.All)
-            {
-                throw new Exception("Sender type must be provided when sender ID is not null.");
-            }
+            }            
 
 #if (NETMF43 || NETMF44)
             if (!StringExt.IsNullOrWhiteSpace(senderId) && senderId.Length > 25)
@@ -205,7 +193,7 @@ namespace Thingface.Client
                 throw new ArgumentOutOfRangeException(nameof(senderId));
             }
 
-            var topicFilter = BuildCommandTopicFilter(senderType, senderId);
+            var topicFilter = BuildCommandTopicFilter(senderId);
             _client.Unsubscribe(new[] { topicFilter });
 
 #if !(NETMF44 || NETMF43)
@@ -251,42 +239,19 @@ namespace Thingface.Client
 #endif
         }
 
-        private string BuildCommandTopicFilter(SenderType senderType, string senderId)
+        private string BuildCommandTopicFilter(string senderId)
         {
-            string senderTypeStr = "+";
-            switch (senderType)
-            {
-                case SenderType.User:
-                    senderTypeStr = "u";
-                    break;
-                case SenderType.Device:
-                    senderTypeStr = "d";
-                    break;
-            }
-
+            
 #if (NETMF44 || NETMF43)
             if (senderId != null && senderId.Trim().Length > 0)
 #else
             if (!string.IsNullOrWhiteSpace(senderId))
 #endif
             {
-                return senderTypeStr + "/" + senderId + "/c/" + _deviceId;
+                return "command/" + senderId + "/" + _deviceId;
             }
 
-            return senderTypeStr + "/+/c/" + _deviceId;
-        }
-
-        private SenderType ParseSenderType(string senderType)
-        {
-            if (senderType == "d")
-            {
-                return SenderType.Device;
-            }
-            if (senderType == "u")
-            {
-                return SenderType.User;
-            }
-            throw new ArgumentOutOfRangeException(nameof(senderType));
+            return "command/+/"+_deviceId;
         }        
 
         private void _client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
@@ -298,28 +263,48 @@ namespace Thingface.Client
                 string payloadString = new string(Encoding.UTF8.GetChars(e.Message));
                 Hashtable command = JsonSerializer.DeserializeString(payloadString) as Hashtable;
 
-                var senderType = ParseSenderType(topicParts[0]);
+                //var senderType = ParseSenderType(topicParts[0]);
                 var senderId = topicParts[2];
                 var commandName = command["c"] as string;
                 var commandArgs = (command["a"] as ArrayList).ToArray();
 
-                OnCommandReceived(new CommandEventArgs(senderType, senderId, commandName, (string[]) commandArgs));
+                OnCommandReceived(new CommandEventArgs(senderId, commandName, (string[]) commandArgs));
             }
 #else
             var commandRegex = new Regex(CommandRegexString);
             if (commandRegex.IsMatch(e.Topic))
-            {
+            {                
                 string payloadString = Encoding.UTF8.GetString(e.Message);
                 var command = JsonConvert.DeserializeObject<CommandPayload>(payloadString);
 
                 var matches = commandRegex.Match(e.Topic);
-                var senderType = ParseSenderType(matches.Groups[1].Value);
+                //var senderType = ParseSenderType(matches.Groups[1].Value);
                 var senderId = matches.Groups[2].Value;
 
-                _commandHandler?.Invoke(new CommandContext(senderType, senderId, command.Name, command.Args));
-                CommandReceived?.Invoke(this, new CommandEventArgs(senderType, senderId, command.Name, command.Args));
+                SendCommandDelivery(senderId, command.Token, CommandDeliveryState.Received, null);
+
+                var resultCode = _commandHandler?.Invoke(new CommandContext(senderId, command.Name, command.Args));
+                CommandReceived?.Invoke(this, new CommandEventArgs(senderId, command.Name, command.Args));
+
+                SendCommandDelivery(senderId, command.Token, CommandDeliveryState.Executed, resultCode);
             }
 #endif
+        }
+
+        private void SendCommandDelivery(string senderId,
+            string token, CommandDeliveryState state, int? resultCode)
+        {
+            var payloadObj = new CommandDeliveryStateLog
+            {
+                Token = token,
+                State = state
+            };
+            if (resultCode.HasValue)
+            {
+                payloadObj.ResultCode = resultCode.Value;
+            }
+            var payloadStr = JsonConvert.SerializeObject(payloadObj);
+            _client.Publish($"command_state/{this._deviceId}/{senderId}", Encoding.UTF8.GetBytes(payloadStr));
         }
 
         private void _client_ConnectionClosed(object sender, EventArgs eventArgs)

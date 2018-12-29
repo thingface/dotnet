@@ -10,6 +10,9 @@ namespace Thingface.Client
 
         [JsonProperty("a")]
         public string[] Args { get; set; }
+
+        [JsonProperty("t")]
+        public string Token { get; set; }
     }
 }
 #endif

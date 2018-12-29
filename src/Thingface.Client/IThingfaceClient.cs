@@ -49,7 +49,7 @@ namespace Thingface.Client
         /// </summary>        
         /// <param name="senderType"></param>
         /// <param name="senderId"></param>
-        void OnCommand(SenderType senderType = SenderType.All, string senderId = null);
+        void OnCommand(string senderId = null);
 #else
         /// <summary>
         /// Subscribe to commands for current device
@@ -57,12 +57,12 @@ namespace Thingface.Client
         /// <param name="commandHandler"></param>
         /// <param name="senderType"></param>
         /// <param name="senderId"></param>
-        void OnCommand(Action<CommandContext> commandHandler = null, SenderType senderType = SenderType.All, string senderId = null);
+        void OnCommand(Func<CommandContext, int> commandHandler = null, string senderId = null);
 #endif
         /// <summary>
         /// Unsubscribe from commands for current device
         /// </summary>
-        void OffCommand(SenderType senderType = SenderType.All, string senderId = null);
+        void OffCommand(string senderId = null);
 
 #if (NETMF44 || NETMF43)
         /// <summary>
